@@ -1,0 +1,570 @@
+<title>메타지우개</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton&family=Black+Han+Sans&family=IBM+Plex+Mono:wght@400;500;700&family=IBM+Plex+Sans+KR:wght@400;500;700&display=swap">
+<style>
+/* Layout: 흑·적·백 브루탈리스트 에디토리얼 — 대형 콘덴스드 워드마크, 굵은 괘선 그리드, 반전 라벨, 그레인. 단일 테마(다크) */
+:root{
+  --ink:#0B0B0B; --paper:#F2EFEA; --red:#E10600; --red-deep:#8C0400;
+  --line:#F2EFEA; --dim:#BDB7B0; --rule:#3A3737;
+  --f-disp:"Anton","Black Han Sans",Impact,"Arial Narrow",sans-serif;
+  --f-kdisp:"Black Han Sans","Anton","Apple SD Gothic Neo",sans-serif;
+  --f-sans:"IBM Plex Sans KR","Apple SD Gothic Neo","Malgun Gothic",system-ui,sans-serif;
+  --f-mono:"IBM Plex Mono",ui-monospace,Menlo,Consolas,monospace;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+body{position:relative;z-index:0;background:var(--ink);color:var(--paper);font-family:var(--f-sans);font-size:16px;line-height:1.65;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:20px 48px}
+body::after{content:"";position:fixed;inset:0;pointer-events:none;z-index:-1;opacity:.05;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 .9 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+::selection{background:var(--red);color:var(--paper)}
+.wrap{max-width:920px;margin:0 auto;display:flex;flex-direction:column;gap:0;border:2px solid var(--line)}
+.sec{padding:18px;border-bottom:2px solid var(--line)}
+.sec:last-child{border-bottom:0}
+
+/* 헤더 */
+.mast{border-bottom:2px solid var(--line)}
+@media (max-width:640px){.mast{grid-template-columns:minmax(0,1fr)}.mast .side{border-left:0!important;border-top:2px solid var(--line)}}
+.mast .main{padding:14px 18px 18px;min-width:0;position:relative;overflow:hidden}
+.strap{display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px;font-family:var(--f-mono);font-size:12.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--dim)}
+.rec{display:inline-flex;align-items:center;gap:6px;color:var(--red);font-weight:700}
+.rec::before{content:"";width:9px;height:9px;border-radius:50%;background:var(--red);animation:blink 1.2s steps(2) infinite}
+@keyframes blink{50%{opacity:0}}
+.word{font-family:var(--f-disp);font-size:clamp(38px,9vw,72px);line-height:.95;letter-spacing:-.01em;text-transform:uppercase;margin:12px 0 0;font-weight:400}
+.word .x{color:var(--red)}
+.word .strike{position:relative;display:inline-block}
+.word .strike::after{content:"";position:absolute;left:-2%;right:-2%;top:52%;height:.11em;background:var(--red)}
+.ko{display:flex;align-items:center;gap:10px;margin-top:12px;flex-wrap:wrap}
+.chips{list-style:none;margin:14px 0 0;padding:0;display:flex;flex-wrap:wrap;gap:6px}
+.chips li{border:2px solid var(--paper);padding:3px 10px;font-size:14px;font-weight:700}
+.chips li::before{content:"✕ ";color:var(--red)}
+.flow{display:flex;flex-wrap:wrap;gap:6px 14px;margin-top:6px;font-size:14px;font-weight:700}
+.flow i{font-style:normal;color:var(--red)}
+.sum{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.sum .c{font-size:13.5px;font-weight:700;padding:2px 9px;border:2px solid var(--paper);text-decoration:line-through;text-decoration-color:var(--red);text-decoration-thickness:2px}
+.sum .c.clean{text-decoration:none;border-color:var(--dim);color:var(--dim)}
+details.more-info>summary{cursor:pointer;font-size:14px;color:var(--dim);list-style:none;text-decoration:underline;text-underline-offset:3px}
+details.more-info>summary::-webkit-details-marker{display:none}
+details.more-info[open]>summary{margin-bottom:8px}
+details.more-info>summary:focus-visible{outline:3px solid var(--red);outline-offset:2px}
+.ko h1{margin:0;font-family:var(--f-kdisp);font-weight:400;font-size:clamp(24px,4.4vw,34px);line-height:1;background:var(--paper);color:var(--ink);padding:4px 10px 2px}
+.ko p{margin:0;font-size:16px;font-weight:500;color:var(--paper)}
+.side{border-left:2px solid var(--line);display:flex;flex-direction:column}
+.side .lbl{background:var(--red);color:var(--paper);font-family:var(--f-mono);font-size:13px;font-weight:700;letter-spacing:.1em;padding:6px 12px}
+.side dl{margin:0;display:flex;flex-direction:column}
+.side dt{font-family:var(--f-mono);font-size:13.5px;font-weight:700;padding:9px 12px 0;color:var(--paper)}
+.side dd{margin:0;font-size:14px;color:var(--dim);padding:0 12px 9px;border-bottom:1px solid var(--rule)}
+.side dd:last-child{border-bottom:0}
+
+/* 드롭 */
+.drop{position:relative;display:grid;grid-template-columns:auto minmax(0,1fr);gap:18px;align-items:center;cursor:pointer;
+  border:2px dashed var(--paper);padding:22px 20px;transition:background .12s,color .12s}
+.drop .plus{font-family:var(--f-disp);font-size:72px;line-height:.8;color:var(--red)}
+.drop strong{display:block;font-family:var(--f-kdisp);font-weight:400;font-size:24px;line-height:1.2}
+.drop span{font-size:14px;color:var(--dim)}
+.drop:hover,.drop.over{background:var(--red);border-style:solid;border-color:var(--red)}
+.drop:hover .plus,.drop.over .plus{color:var(--ink)}
+.drop:hover span,.drop.over span{color:var(--paper)}
+.drop:focus-within{outline:3px solid var(--red);outline-offset:3px}
+.drop input{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%}
+
+/* 옵션 */
+.opts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0;padding:0!important}
+@media (max-width:640px){.opts{grid-template-columns:minmax(0,1fr)}.opts fieldset+fieldset{border-left:0!important;border-top:2px solid var(--line)}}
+fieldset{border:0;margin:0;padding:16px 18px;display:flex;flex-direction:column;gap:10px;min-width:0}
+fieldset+fieldset{border-left:2px solid var(--line)}
+legend{float:left;width:100%;padding:0;font-family:var(--f-kdisp);font-size:18px;font-weight:400;color:var(--paper)}
+.seg{display:grid;grid-template-columns:1fr 1fr;border:2px solid var(--paper)}
+.seg label{padding:10px 10px;font-family:var(--f-kdisp);font-size:18px;cursor:pointer;text-align:center}
+.seg label+label{border-left:2px solid var(--paper)}
+.seg input{position:absolute;opacity:0;pointer-events:none}
+.seg label:has(input:checked){background:var(--paper);color:var(--ink)}
+.seg label:has(input:focus-visible){outline:3px solid var(--red);outline-offset:-3px}
+.check{display:flex;gap:10px;align-items:center;font-size:16px;font-weight:500;cursor:pointer}
+.check input{appearance:none;width:20px;height:20px;border:2px solid var(--paper);margin:0;display:grid;place-content:center;cursor:pointer;flex:none}
+.check input:checked{background:var(--red);border-color:var(--red)}
+.check input:checked::after{content:"";width:8px;height:8px;background:var(--paper)}
+.check input:focus-visible{outline:3px solid var(--red);outline-offset:2px}
+.hint{font-size:14.5px;line-height:1.6;color:var(--dim);max-width:52ch;margin:0}
+
+/* 바 */
+.bar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between;padding:12px 18px!important;background:var(--paper);color:var(--ink)}
+.bar .count{font-size:15px;font-weight:700;font-variant-numeric:tabular-nums}
+.bar .btns,.status .btns{display:flex;gap:8px;flex-wrap:wrap}
+button{font:inherit;font-size:14.5px;font-weight:700;border-radius:0;padding:9px 16px;cursor:pointer;
+  border:2px solid currentColor;background:transparent;color:inherit;transition:background .1s,color .1s}
+button:hover{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+.card button:hover{background:var(--paper);color:var(--ink);border-color:var(--paper)}
+button:focus-visible{outline:3px solid var(--red);outline-offset:2px}
+button.primary{background:var(--red);color:var(--paper);border-color:var(--red)}
+button.primary:hover{background:var(--red-deep);border-color:var(--red-deep);color:var(--paper)}
+button:disabled{opacity:.35;cursor:default}
+
+/* 목록 */
+ul.list{list-style:none;margin:0;padding:0;display:flex;flex-direction:column}
+.card{display:grid;grid-template-columns:120px minmax(0,1fr);gap:0;border-bottom:2px solid var(--line)}
+.card:last-child{border-bottom:0}
+@media (max-width:560px){.card{grid-template-columns:96px minmax(0,1fr)}.thumb{padding:10px}.thumb small{display:none}.info{padding:12px!important}}
+.thumb{display:flex;flex-direction:column;gap:8px;padding:14px;border-right:2px solid var(--line)}
+.thumb img{width:100%;max-width:100%;aspect-ratio:1/1;object-fit:contain;filter:grayscale(.15) contrast(1.05);
+  background:repeating-conic-gradient(var(--rule) 0 25%,transparent 0 50%) 0 0/12px 12px}
+.thumb small{font-size:12.5px;color:var(--dim);line-height:1.45}
+.info{min-width:0;display:flex;flex-direction:column;gap:12px;padding:14px 18px}
+.top{display:flex;flex-wrap:wrap;gap:6px 10px;align-items:baseline}
+.fname{font-weight:700;font-size:16px;word-break:break-all}
+.meta{font-family:var(--f-mono);font-size:13px;color:var(--dim);font-variant-numeric:tabular-nums}
+.tag{font-size:12px;font-weight:700;padding:1px 7px;background:var(--red);color:var(--paper)}
+.found{border:2px solid var(--line)}
+.found h3{margin:0;font-size:14px;font-weight:700;background:var(--paper);color:var(--ink);padding:5px 10px}
+.row{display:flex;flex-direction:column;gap:4px;padding:10px 12px;border-top:1px solid var(--rule);font-size:14px}
+.found h3+.row{border-top:0}
+.row .k{font-family:var(--f-mono);font-size:13px;font-weight:700;color:var(--paper);border-left:4px solid var(--red);padding-left:8px;overflow-wrap:anywhere}
+.row .v{font-size:14px;line-height:1.6;color:var(--dim);min-width:0;overflow-wrap:anywhere;white-space:pre-wrap;max-height:6.4em;overflow:hidden;padding-left:12px}
+.row .v.open{max-height:none}
+.row .more{align-self:flex-start;margin-left:12px;font-size:13px;padding:0;border:0;color:var(--dim);text-decoration:underline;text-underline-offset:3px}
+.row .more:hover{background:none;color:var(--paper)}
+.row .k .tech{display:block;font-family:var(--f-mono);font-size:11.5px;font-weight:400;color:var(--dim);margin-top:1px}
+.row .k .what{font-family:var(--f-sans);font-size:15px}
+.steps{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:0;padding:0!important}
+@media (max-width:640px){.steps{grid-template-columns:minmax(0,1fr)}.steps li+li{border-left:0!important;border-top:2px solid var(--line)}}
+.steps li{list-style:none;padding:16px 18px;display:flex;flex-direction:column;gap:4px;min-width:0}
+.steps li+li{border-left:2px solid var(--line)}
+.steps .no{font-family:var(--f-disp);font-size:34px;line-height:1;color:var(--red)}
+.steps b{font-family:var(--f-kdisp);font-weight:400;font-size:19px}
+.steps span{font-size:14.5px;color:var(--dim)}
+.faq{display:flex;flex-direction:column;gap:0;padding:0!important}
+.faq h2{margin:0;font-family:var(--f-kdisp);font-weight:400;font-size:20px;padding:14px 18px;border-bottom:2px solid var(--line)}
+.faq details{border-bottom:1px solid var(--rule)}
+.faq details:last-child{border-bottom:0}
+.faq summary{cursor:pointer;padding:13px 18px;font-weight:700;font-size:15.5px;list-style:none;display:flex;gap:10px}
+.faq summary::-webkit-details-marker{display:none}
+.faq summary::before{content:"+";color:var(--red);font-family:var(--f-disp);font-size:20px;line-height:1.1;width:12px;flex:none}
+.faq details[open] summary::before{content:"−"}
+.faq summary:focus-visible{outline:3px solid var(--red);outline-offset:-3px}
+.faq p{margin:0;padding:0 18px 16px 40px;font-size:15px;color:var(--dim);max-width:68ch}
+.none{padding:10px 12px;font-size:14px;color:var(--dim)}
+.status{display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between}
+.pill{font-size:14px;font-weight:700;padding:6px 12px}
+.pill.ok{background:var(--paper);color:var(--ink)}
+.pill.ok::before{content:"■ ";color:var(--red)}
+.pill.warn{background:var(--red);color:var(--paper)}
+.pill.busy{border:2px solid var(--paper);background:repeating-linear-gradient(-45deg,transparent 0 6px,var(--rule) 6px 12px)}
+.empty{font-size:15px;color:var(--dim);text-align:center;padding:28px 18px}
+footer{font-size:14px;line-height:1.7;color:var(--dim);max-width:none}
+footer b{color:var(--paper);font-weight:500}
+.toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--red);color:var(--paper);
+  font-size:14.5px;font-weight:700;padding:9px 16px;z-index:40;max-width:calc(100vw - 32px)}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style>
+
+<div class="wrap">
+  <header class="mast">
+    <div class="main">
+      <div class="strap"><span class="rec">REC OFF</span><span>NovelAI 그림 전용</span></div>
+      <div class="word" aria-hidden="true">NAI <span class="strike">META</span> <span class="x">ERASER</span></div>
+      <div class="ko"><h1>메타지우개</h1><p>그림 파일 속 프롬프트를 지워 드립니다</p></div>
+      <ul class="chips" aria-label="지우는 것"><li>프롬프트</li><li>시드·설정값</li><li>숨겨진 정보</li><li>파일 이름</li></ul>
+    </div>
+  </header>
+
+  <div class="sec">
+    <label class="drop" id="drop">
+      <input type="file" id="file" accept="image/png,image/jpeg,image/webp" multiple>
+      <div class="plus" aria-hidden="true">+</div>
+      <div><strong>이미지를 끌어다 놓거나 눌러서 고르세요</strong>
+      <span>PNG · JPG · WebP · 여러 장 가능</span>
+      <div class="flow"><span>① 넣기</span><i>→</i><span>② 확인</span><i>→</i><span>③ 저장</span></div></div>
+    </label>
+  </div>
+
+  <div class="opts sec">
+    <fieldset>
+      <legend>제거 방식</legend>
+      <div class="seg" role="radiogroup">
+        <label><input type="radio" name="mode" id="mode-full" value="full" checked>완전 제거 (추천)</label>
+        <label><input type="radio" name="mode" id="mode-fast" value="fast">글자 정보만</label>
+      </div>
+      <div class="hint" id="mode-hint">숨겨진 정보까지 전부 지웁니다. 그림은 그대로예요.</div>
+    </fieldset>
+    <fieldset>
+      <legend>파일 이름</legend>
+      <label class="check"><input type="checkbox" id="rename" checked>새 이름으로 바꾸기</label>
+      <div class="hint">NAI 파일명 속 프롬프트·시드도 지웁니다.</div>
+    </fieldset>
+  </div>
+
+  <div class="bar sec">
+    <div class="count" id="count">0장</div>
+    <div class="btns">
+      <button id="clear" type="button">목록 비우기</button>
+      <button id="saveall" type="button" class="primary">전체 저장 (ZIP)</button>
+    </div>
+  </div>
+
+  <div class="sec" style="padding:0"><ul class="list" id="list"></ul></div>
+
+  <section class="sec faq">
+    <h2>궁금한 점</h2>
+    <details><summary>메타데이터가 뭔가요?</summary><p>그림 파일 안에 그림과 별도로 저장되는 '설명서' 같은 정보입니다. NAI는 그림을 만들 때 프롬프트, 네거티브 프롬프트, 시드 번호, 샘플러, 스텝 수 같은 설정을 파일 안에 함께 적어 둡니다. 화면에는 보이지 않지만 다른 사이트나 프로그램에 파일을 넣으면 그대로 읽힙니다.</p></details>
+    <details><summary>왜 지워야 하나요?</summary><p>공들여 다듬은 프롬프트가 그림과 함께 그대로 퍼지기 때문입니다. 캐릭터 이미지나 홍보 이미지를 올릴 때, 다른 사람이 파일만 받아서 똑같은 설정으로 비슷한 그림을 뽑을 수 있습니다. 내 프롬프트를 지키고 싶다면 올리기 전에 지우는 게 좋습니다.</p></details>
+    <details><summary>'숨겨진 생성 정보'는 또 뭔가요?</summary><p>NAI는 글자로 적은 정보 말고도, 그림의 투명도 값 아주 작은 부분에 같은 정보를 한 번 더 새겨 둡니다. 눈으로는 절대 구분이 안 되지만 전용 도구로는 꺼낼 수 있습니다. 글자 정보만 지우는 사이트를 쓰면 이게 남는 경우가 많아서, 여기서는 '완전 제거'로 이것까지 지웁니다.</p></details>
+    <details><summary>지우면 그림이 달라지나요?</summary><p>눈으로 보이는 그림은 달라지지 않습니다. PNG는 색 하나 바뀌지 않고, JPG와 WebP는 다시 저장하면서 아주 살짝 압축되지만 알아보기 어려운 수준입니다. 투명 배경이 있는 그림도 그대로 유지됩니다.</p></details>
+    <details><summary>'글자 정보만'은 언제 쓰나요?</summary><p>그림을 원본 그대로 한 비트도 건드리고 싶지 않을 때만 쓰세요. 대신 숨겨진 생성 정보는 남습니다. 저장 전에 '아직 남은 정보가 있습니다'라고 표시되니 확인할 수 있습니다.</p></details>
+    <details><summary>SNS에 올리면 자동으로 지워지지 않나요?</summary><p>일부 사이트는 올릴 때 지워 주지만, 원본 파일을 그대로 보관하거나 그대로 내려받게 해 주는 곳도 많습니다. 어디에 올리든 직접 지운 파일을 쓰는 게 안전합니다.</p></details>
+    <details><summary>내 그림이 어딘가로 전송되나요?</summary><p>아닙니다. 모든 처리는 지금 쓰고 있는 기기의 브라우저 안에서만 일어납니다. 그림은 인터넷으로 보내지지 않습니다.</p></details>
+  </section>
+  <footer class="sec"><b>내 기기 안에서만 처리합니다</b> · 그림은 어디로도 업로드되지 않습니다.</footer>
+</div>
+
+<script>
+(() => {
+const $ = s => document.querySelector(s);
+const listEl = $('#list');
+const items = [];
+let seq = 0;
+
+/* ---------- 바이트 유틸 ---------- */
+const CRC_T = (() => { const t = new Uint32Array(256); for (let n = 0; n < 256; n++) { let c = n; for (let k = 0; k < 8; k++) c = c & 1 ? 0xEDB88320 ^ (c >>> 1) : c >>> 1; t[n] = c >>> 0; } return t; })();
+function crc32(u8, start = 0, end = u8.length) { let c = 0xFFFFFFFF; for (let i = start; i < end; i++) c = CRC_T[(c ^ u8[i]) & 255] ^ (c >>> 8); return (c ^ 0xFFFFFFFF) >>> 0; }
+const u32 = (u, p) => ((u[p] << 24) | (u[p+1] << 16) | (u[p+2] << 8) | u[p+3]) >>> 0;
+const utf8 = new TextDecoder('utf-8', { fatal: false });
+const enc = new TextEncoder();
+async function inflate(u8, fmt) {
+  try { const ds = new DecompressionStream(fmt); return new Uint8Array(await new Response(new Blob([u8]).stream().pipeThrough(ds)).arrayBuffer()); }
+  catch { return null; }
+}
+async function deflate(u8, fmt) {
+  const cs = new CompressionStream(fmt); return new Uint8Array(await new Response(new Blob([u8]).stream().pipeThrough(cs)).arrayBuffer());
+}
+const fmtSize = b => b < 1024 ? b + ' B' : b < 1048576 ? (b/1024).toFixed(1) + ' KB' : (b/1048576).toFixed(2) + ' MB';
+
+/* ---------- PNG 청크 ---------- */
+const SIG = [137,80,78,71,13,10,26,10];
+const KEEP = new Set(['IHDR','PLTE','IDAT','IEND','tRNS','gAMA','cHRM','sRGB','iCCP','sBIT','pHYs']);
+const CHUNK_LABEL = { eXIf:'EXIF', tIME:'생성 시각', caBX:'C2PA 출처 서명', iTXt:'텍스트', tEXt:'텍스트', zTXt:'압축 텍스트' };
+function isPng(u) { return u.length > 8 && SIG.every((v,i) => u[i] === v); }
+function chunksOf(u) {
+  const out = []; let p = 8;
+  while (p + 12 <= u.length) {
+    const len = u32(u, p), type = String.fromCharCode(u[p+4],u[p+5],u[p+6],u[p+7]);
+    if (p + 12 + len > u.length) break;
+    out.push({ type, start: p, end: p + 12 + len, data: u.subarray(p + 8, p + 8 + len) });
+    p += 12 + len; if (type === 'IEND') break;
+  }
+  return out;
+}
+async function readTextChunk(c) {
+  const d = c.data, z = d.indexOf(0); if (z < 0) return null;
+  const key = utf8.decode(d.subarray(0, z));
+  if (c.type === 'tEXt') return { key, value: utf8.decode(d.subarray(z + 1)) };
+  if (c.type === 'zTXt') { const r = await inflate(d.subarray(z + 2), 'deflate'); return { key, value: r ? utf8.decode(r) : '(압축 해제 실패)' }; }
+  if (c.type === 'iTXt') {
+    const flag = d[z + 1]; let p = z + 3;
+    const l1 = d.indexOf(0, p); p = l1 + 1; const l2 = d.indexOf(0, p); p = l2 + 1;
+    const body = d.subarray(p);
+    if (flag) { const r = await inflate(body, 'deflate'); return { key, value: r ? utf8.decode(r) : '(압축 해제 실패)' }; }
+    return { key, value: utf8.decode(body) };
+  }
+  return null;
+}
+function makeChunk(type, data) {
+  const out = new Uint8Array(12 + data.length), dv = new DataView(out.buffer);
+  dv.setUint32(0, data.length); out.set(enc.encode(type), 4); out.set(data, 8);
+  dv.setUint32(8 + data.length, crc32(out, 4, 8 + data.length)); return out;
+}
+function stripPngChunks(u) {
+  const parts = [new Uint8Array(SIG)];
+  for (const c of chunksOf(u)) if (KEEP.has(c.type)) parts.push(u.subarray(c.start, c.end));
+  return new Blob(parts, { type: 'image/png' });
+}
+
+/* ---------- JPG / WebP 메타 탐지 ---------- */
+function scanJpeg(u) {
+  const found = []; let p = 2;
+  while (p + 4 < u.length && u[p] === 0xFF) {
+    const m = u[p+1]; if (m === 0xDA || m === 0xD9) break;
+    const len = (u[p+2] << 8) | u[p+3], seg = u.subarray(p + 4, p + 2 + len);
+    const head = String.fromCharCode(...seg.subarray(0, 28));
+    if (m === 0xE1 && head.startsWith('Exif')) found.push({ key: 'APP1 Exif', value: `EXIF 블록 ${fmtSize(len)}` });
+    else if (m === 0xE1 && head.includes('ns.adobe.com')) found.push({ key: 'APP1 XMP', value: utf8.decode(seg).replace(/^[^<]*/, '').slice(0, 600) });
+    else if (m === 0xFE) found.push({ key: 'COM', value: utf8.decode(seg) });
+    else if (m === 0xED) found.push({ key: 'APP13 IPTC', value: `IPTC 블록 ${fmtSize(len)}` });
+    p += 2 + len;
+  }
+  return found;
+}
+function scanWebp(u) {
+  const found = []; let p = 12;
+  while (p + 8 <= u.length) {
+    const t = String.fromCharCode(u[p],u[p+1],u[p+2],u[p+3]); const len = u[p+4] | (u[p+5]<<8) | (u[p+6]<<16) | (u[p+7]<<24);
+    if (t === 'EXIF') found.push({ key: 'EXIF', value: `EXIF 블록 ${fmtSize(len)}` });
+    if (t === 'XMP ') found.push({ key: 'XMP', value: utf8.decode(u.subarray(p+8, p+8+len)).slice(0, 600) });
+    p += 8 + len + (len & 1);
+  }
+  return found;
+}
+
+/* ---------- 픽셀 / 스텔스 ---------- */
+async function decode(blob) {
+  try { return await createImageBitmap(blob, { premultiplyAlpha: 'none', colorSpaceConversion: 'none' }); }
+  catch { return await createImageBitmap(blob); }
+}
+async function pixels(blob) {
+  const bmp = await decode(blob);
+  const c = document.createElement('canvas'); c.width = bmp.width; c.height = bmp.height;
+  const ctx = c.getContext('2d', { willReadFrequently: true }); ctx.drawImage(bmp, 0, 0);
+  bmp.close && bmp.close();
+  return { c, ctx, img: ctx.getImageData(0, 0, c.width, c.height) };
+}
+const MAGICS = ['stealth_pnginfo', 'stealth_pngcomp'];
+async function readStealth(img) {
+  const { width: w, height: h, data } = img, total = w * h;
+  if (total < 200) return null;
+  const bit = i => data[((i % h) * w + Math.floor(i / h)) * 4 + 3] & 1;
+  const bytes = (s, n) => { const o = new Uint8Array(n); for (let b = 0; b < n; b++) { let v = 0; for (let k = 0; k < 8; k++) v = (v << 1) | bit(s + b * 8 + k); o[b] = v; } return o; };
+  const magic = String.fromCharCode(...bytes(0, 15));
+  if (!MAGICS.includes(magic)) return null;
+  let len = 0; for (let k = 0; k < 32; k++) len = len * 2 + bit(120 + k);
+  if (len <= 0 || 152 + len > total) return { magic, value: '(길이 정보 손상)' };
+  let payload = bytes(152, Math.floor(len / 8));
+  if (magic.endsWith('comp')) { const r = await inflate(payload, 'gzip'); payload = r || payload; }
+  return { magic, value: utf8.decode(payload) };
+}
+
+/* ---------- 분석 ---------- */
+async function analyze(blob) {
+  const u = new Uint8Array(await blob.arrayBuffer());
+  const rep = { kind: 'other', rows: [], w: 0, h: 0, stealth: null };
+  if (isPng(u)) {
+    rep.kind = 'png';
+    for (const c of chunksOf(u)) {
+      if (KEEP.has(c.type)) continue;
+      if (c.type === 'tEXt' || c.type === 'iTXt' || c.type === 'zTXt') {
+        const t = await readTextChunk(c); if (t) rep.rows.push({ key: `${c.type} · ${t.key}`, value: prettify(t.value) });
+      } else rep.rows.push({ key: c.type, value: `${CHUNK_LABEL[c.type] || '부가 청크'} · ${fmtSize(c.data.length)}` });
+    }
+  } else if (u[0] === 0xFF && u[1] === 0xD8) { rep.kind = 'jpeg'; rep.rows.push(...scanJpeg(u)); }
+  else if (String.fromCharCode(...u.subarray(8, 12)) === 'WEBP') { rep.kind = 'webp'; rep.rows.push(...scanWebp(u)); }
+  try {
+    const { img } = await pixels(blob); rep.w = img.width; rep.h = img.height;
+    if (rep.kind !== 'jpeg') { const s = await readStealth(img); if (s) { rep.stealth = s; rep.rows.push({ key: `alpha · ${s.magic}`, value: prettify(s.value) }); } }
+  } catch { rep.decodeFail = true; }
+  return rep;
+}
+function friendly(key) {
+  if (/stealth/.test(key)) return '숨겨진 정보';
+  const name = key.split(' · ').pop();
+  const map = { Description: '프롬프트', prompt: '프롬프트', Comment: '시드·설정값', parameters: '시드·설정값', workflow: '시드·설정값',
+    Software: '프로그램 이름', Source: '모델 이름', Title: '제목', 'Generation time': '생성 시간',
+    caBX: 'AI 생성 표시', eXIf: '사진 정보', 'APP1 Exif': '사진 정보', EXIF: '사진 정보', tIME: '저장 시각',
+    'APP1 XMP': '추가 정보', XMP: '추가 정보', COM: '메모', 'APP13 IPTC': '추가 정보' };
+  return map[name] || map[key] || '기타 정보';
+}
+function prettify(v) { try { const j = JSON.parse(v); return typeof j === 'object' ? JSON.stringify(j, null, 1) : v; } catch { return v; } }
+
+/* ---------- 제거 ---------- */
+async function clean(item, mode) {
+  const src = item.blob, kind = item.report.kind;
+  if (mode === 'fast' && kind === 'png') return stripPngChunks(new Uint8Array(await src.arrayBuffer()));
+  const { c, ctx, img } = await pixels(src);
+  if (kind !== 'jpeg') {
+    const d = img.data;
+    for (let i = 3; i < d.length; i += 4) { const a = d[i]; d[i] = a >= 254 ? 255 : (a & 0xFE); }
+    ctx.putImageData(img, 0, 0);
+  }
+  const type = kind === 'jpeg' ? 'image/jpeg' : kind === 'webp' ? 'image/webp' : 'image/png';
+  return await new Promise((res, rej) => c.toBlob(b => b ? res(b) : rej(new Error('인코딩 실패')), type, 0.95));
+}
+
+/* ---------- 파일 이름 ---------- */
+const EXT = { png: 'png', jpeg: 'jpg', webp: 'webp', other: 'png' };
+function outName(item) {
+  const ext = EXT[item.report.kind];
+  if ($('#rename').checked) return `image_${String(item.n).padStart(3, '0')}_${item.rand}.${ext}`;
+  return item.name.replace(/\.[^.]+$/, '') + `_clean.${ext}`;
+}
+
+/* ---------- 저장 ---------- */
+let dlPromise = null;
+function getDownloads() {
+  if (!dlPromise) dlPromise = (async () => {
+    if (!window.claude || typeof window.claude.use !== 'function') return null;
+    try { return await window.claude.use('downloads'); } catch { return null; }
+  })();
+  return dlPromise;
+}
+async function saveBlob(blob, filename) {
+  const dl = await getDownloads();
+  if (dl) {
+    try { await dl.save({ filename, data: blob }); toast('저장했습니다'); }
+    catch (e) {
+      if (e && e.code === 'declined') return;
+      if (e && e.code === 'rate_limited') { toast('저장 창이 이미 열려 있습니다'); return; }
+      toast('여기서는 저장이 안 됩니다. 결과 이미지를 길게 누르거나 우클릭해서 저장하세요');
+    }
+    return;
+  }
+  const url = URL.createObjectURL(blob), a = document.createElement('a');
+  a.href = url; a.download = filename; document.body.appendChild(a); a.click(); a.remove();
+  setTimeout(() => URL.revokeObjectURL(url), 4000);
+}
+async function zip(files) {
+  const parts = [], central = []; let off = 0;
+  for (const f of files) {
+    const data = new Uint8Array(await f.blob.arrayBuffer()), name = enc.encode(f.name), crc = crc32(data);
+    const lh = new Uint8Array(30 + name.length), lv = new DataView(lh.buffer);
+    lv.setUint32(0, 0x04034b50, true); lv.setUint16(4, 20, true); lv.setUint16(6, 0x0800, true);
+    lv.setUint16(12, 0x21, true); lv.setUint32(14, crc, true); lv.setUint32(18, data.length, true); lv.setUint32(22, data.length, true);
+    lv.setUint16(26, name.length, true); lh.set(name, 30);
+    const ch = new Uint8Array(46 + name.length), cv = new DataView(ch.buffer);
+    cv.setUint32(0, 0x02014b50, true); cv.setUint16(4, 20, true); cv.setUint16(6, 20, true); cv.setUint16(8, 0x0800, true);
+    cv.setUint16(14, 0x21, true); cv.setUint32(16, crc, true); cv.setUint32(20, data.length, true); cv.setUint32(24, data.length, true);
+    cv.setUint16(28, name.length, true); cv.setUint32(42, off, true); ch.set(name, 46);
+    parts.push(lh, data); central.push(ch); off += lh.length + data.length;
+  }
+  const cdSize = central.reduce((s, c) => s + c.length, 0);
+  const end = new Uint8Array(22), ev = new DataView(end.buffer);
+  ev.setUint32(0, 0x06054b50, true); ev.setUint16(8, files.length, true); ev.setUint16(10, files.length, true);
+  ev.setUint32(12, cdSize, true); ev.setUint32(16, off, true);
+  return new Blob([...parts, ...central, end], { type: 'application/zip' });
+}
+
+/* ---------- 흐름 ---------- */
+async function addFiles(files, sample = false) {
+  for (const f of files) {
+    if (!/^image\/(png|jpeg|webp)$/.test(f.type) && !/\.(png|jpe?g|webp)$/i.test(f.name || '')) continue;
+    const item = { id: ++seq, n: items.length + 1, rand: Math.random().toString(36).slice(2, 6), name: f.name || `pasted_${seq}.png`,
+      blob: f, url: URL.createObjectURL(f), sample, status: 'busy' };
+    items.push(item); render();
+    try { item.report = await analyze(f); await process(item); }
+    catch (e) { item.status = 'error'; item.error = e.message || String(e); }
+    render();
+  }
+}
+async function process(item) {
+  item.status = 'busy'; render();
+  const mode = document.querySelector('input[name=mode]:checked').value;
+  const out = await clean(item, mode);
+  if (item.out) URL.revokeObjectURL(item.out.url);
+  const rep = await analyze(out);
+  item.out = { blob: out, url: URL.createObjectURL(out), report: rep, mode };
+  item.status = rep.rows.length ? 'warn' : 'ok';
+}
+async function reprocessAll() { for (const it of items) if (it.report) { try { await process(it); } catch (e) { it.status = 'error'; it.error = e.message; } } render(); }
+
+/* ---------- 렌더 ---------- */
+function el(tag, cls, text) { const e = document.createElement(tag); if (cls) e.className = cls; if (text != null) e.textContent = text; return e; }
+function render() {
+  $('#count').textContent = items.length ? `${items.length}장 · 정리 완료 ${items.filter(i => i.status === 'ok').length}장` : '0장';
+  $('#saveall').disabled = !items.some(i => i.out);
+  listEl.replaceChildren();
+  if (!items.length) { listEl.append(el('li', 'empty', '아직 넣은 이미지가 없습니다')); return; }
+  for (const it of items) {
+    const li = el('li', 'card');
+    const th = el('div', 'thumb'); const img = el('img'); img.alt = it.name; img.src = it.out ? it.out.url : it.url; th.append(img);
+    if (it.out) th.append(el('small', null, '길게 눌러서 저장해도 됩니다'));
+    const info = el('div', 'info');
+    const top = el('div', 'top'); top.append(el('span', 'fname', it.name));
+    if (it.sample) top.append(el('span', 'tag', '예시'));
+    if (it.report) top.append(el('span', 'meta', `${it.report.w}×${it.report.h} · ${fmtSize(it.blob.size)}${it.out ? ' → ' + fmtSize(it.out.blob.size) : ''}`));
+    info.append(top);
+    if (it.report) {
+      const sum = el('div', 'sum');
+      const names = [...new Set(it.report.rows.map(r => friendly(r.key)))];
+      if (names.length) names.forEach(n => sum.append(el('span', 'c', n)));
+      else sum.append(el('span', 'c clean', '원래 깨끗한 그림'));
+      info.append(sum);
+    }
+    const box = el('div', 'found'); box.append(el('h3', null, '들어 있던 내용'));
+    if (!it.report) box.append(el('div', 'none', '읽는 중…'));
+    else if (!it.report.rows.length) box.append(el('div', 'none', '들어 있던 정보가 없습니다. 원래부터 깨끗한 그림입니다.'));
+    else for (const r of it.report.rows) {
+      const row = el('div', 'row'); const v = el('div', 'v', r.value);
+      const k = el('div', 'k'); k.append(el('span', 'what', friendly(r.key)), el('span', 'tech', r.key)); row.append(k, v);
+      if (r.value.length > 160 || r.value.split('\n').length > 3) {
+        const m = el('button', 'more', '펼치기'); m.type = 'button';
+        m.onclick = () => { v.classList.toggle('open'); m.textContent = v.classList.contains('open') ? '접기' : '펼치기'; };
+        row.append(m);
+      }
+      box.append(row);
+    }
+    if (it.report && it.report.rows.length) {
+      const det = el('details', 'more-info'); det.append(el('summary', null, '들어 있던 내용 자세히 보기'), box); info.append(det);
+    } else if (!it.report) info.append(box);
+    const st = el('div', 'status');
+    if (it.status === 'busy') st.append(el('span', 'pill busy', '정보를 지우는 중…'));
+    else if (it.status === 'error') st.append(el('span', 'pill warn', '실패: ' + (it.error || '읽을 수 없는 이미지')));
+    else if (it.status === 'ok') st.append(el('span', 'pill ok', '깨끗해졌습니다'));
+    else if (it.status === 'warn') {
+      const left = [...new Set(it.out.report.rows.map(r => friendly(r.key)))].join(', ');
+      st.append(el('span', 'pill warn', `남은 정보: ${left}` + (it.out.mode === 'fast' ? ' → 완전 제거를 고르세요' : '')));
+    }
+    const btns = el('div', 'btns');
+    if (it.report && it.report.rows.length) {
+      const cp = el('button', null, '내용 복사'); cp.type = 'button';
+      cp.onclick = () => copy(it.report.rows.map(r => `[${friendly(r.key)}]\n${r.value}`).join('\n\n'));
+      btns.append(cp);
+    }
+    if (it.out) { const sv = el('button', 'primary', '저장'); sv.type = 'button'; sv.onclick = () => saveBlob(it.out.blob, outName(it)); btns.append(sv); }
+    st.append(btns); info.append(st);
+    li.append(th, info); listEl.append(li);
+  }
+}
+async function copy(text) {
+  try { await navigator.clipboard.writeText(text); toast('복사했습니다'); }
+  catch { const t = el('textarea'); t.value = text; document.body.append(t); t.select(); try { document.execCommand('copy'); toast('복사했습니다'); } catch { toast('복사하지 못했습니다'); } t.remove(); }
+}
+let toastT; function toast(msg) { let t = $('.toast'); if (!t) { t = el('div', 'toast'); t.setAttribute('role', 'status'); document.body.append(t); } t.textContent = msg; t.hidden = false; clearTimeout(toastT); toastT = setTimeout(() => t.hidden = true, 2400); }
+
+/* ---------- 이벤트 ---------- */
+$('#file').addEventListener('change', e => { addFiles([...e.target.files]); e.target.value = ''; });
+const drop = $('#drop');
+['dragenter', 'dragover'].forEach(t => drop.addEventListener(t, e => { e.preventDefault(); drop.classList.add('over'); }));
+['dragleave', 'drop'].forEach(t => drop.addEventListener(t, e => { e.preventDefault(); drop.classList.remove('over'); }));
+drop.addEventListener('drop', e => addFiles([...e.dataTransfer.files]));
+document.addEventListener('paste', e => { const fs = [...(e.clipboardData?.files || [])]; if (fs.length) addFiles(fs); });
+document.querySelectorAll('input[name=mode]').forEach(r => r.addEventListener('change', () => {
+  $('#mode-hint').textContent = r.value === 'full' && r.checked ? '숨겨진 정보까지 전부 지웁니다. 그림은 그대로예요.'
+    : '글자 정보만 지웁니다. 숨겨진 정보는 남아요.';
+  reprocessAll();
+}));
+$('#rename').addEventListener('change', render);
+$('#clear').addEventListener('click', () => { for (const it of items) { URL.revokeObjectURL(it.url); it.out && URL.revokeObjectURL(it.out.url); } items.length = 0; render(); });
+$('#saveall').addEventListener('click', async () => {
+  const ready = items.filter(i => i.out); if (!ready.length) return;
+  if (ready.length === 1) return saveBlob(ready[0].out.blob, outName(ready[0]));
+  saveBlob(await zip(ready.map(i => ({ name: outName(i), blob: i.out.blob }))), `clean_images_${ready.length}.zip`);
+});
+
+/* ---------- 예시 이미지: 가짜 NAI 메타데이터를 심은 PNG ---------- */
+async function makeSample() {
+  const w = 320, h = 320, c = document.createElement('canvas'); c.width = w; c.height = h;
+  const g = c.getContext('2d');
+  const grad = g.createLinearGradient(0, 0, w, h); grad.addColorStop(0, '#1B2340'); grad.addColorStop(1, '#5B3A6E');
+  g.fillStyle = grad; g.fillRect(0, 0, w, h);
+  g.fillStyle = 'rgba(255,214,150,.9)'; g.beginPath(); g.arc(210, 110, 46, 0, Math.PI * 2); g.fill();
+  g.fillStyle = '#0E1222'; g.beginPath(); g.moveTo(0, 250); g.lineTo(90, 170); g.lineTo(170, 230); g.lineTo(250, 160); g.lineTo(320, 220); g.lineTo(320, 320); g.lineTo(0, 320); g.fill();
+  const prompt = '1boy, black hair, red eyes, suit, night, city lights, masterpiece, best quality';
+  const comment = { prompt, steps: 28, height: h, width: w, scale: 5, uncond_scale: 1, cfg_rescale: 0, seed: 2847193651, n_samples: 1, sampler: 'k_euler_ancestral', negative_prompt: 'lowres, bad anatomy', noise_schedule: 'karras' };
+  // 알파 스텔스 삽입
+  const img = g.getImageData(0, 0, w, h);
+  const payload = await deflate(enc.encode(JSON.stringify({ Description: prompt, Software: 'NovelAI', Source: 'NovelAI Diffusion V4.5', Comment: JSON.stringify(comment) })), 'gzip');
+  const bits = []; const push = (byte, n = 8) => { for (let k = n - 1; k >= 0; k--) bits.push((byte >> k) & 1); };
+  for (const ch of 'stealth_pngcomp') push(ch.charCodeAt(0));
+  const L = payload.length * 8; for (let k = 31; k >= 0; k--) bits.push(Math.floor(L / 2 ** k) % 2);
+  for (const b of payload) push(b);
+  bits.forEach((b, i) => { img.data[((i % h) * w + Math.floor(i / h)) * 4 + 3] = 254 | b; });
+  g.putImageData(img, 0, 0);
+  const base = new Uint8Array(await (await new Promise(r => c.toBlob(r, 'image/png'))).arrayBuffer());
+  const text = (k, v) => makeChunk('tEXt', enc.encode(k + '\0' + v));
+  const extra = [text('Title', 'NovelAI generated image'), text('Description', prompt), text('Software', 'NovelAI'), text('Source', 'NovelAI Diffusion V4.5'), text('Generation time', '4.21'), text('Comment', JSON.stringify(comment))];
+  const ih = chunksOf(base)[0];
+  const blob = new Blob([base.subarray(0, ih.end), ...extra, base.subarray(ih.end)], { type: 'image/png' });
+  return new File([blob], `${prompt.slice(0, 40)} s-2847193651.png`, { type: 'image/png' });
+}
+render();
+makeSample().then(f => addFiles([f], true)).catch(() => {});
+})();
+</script>
