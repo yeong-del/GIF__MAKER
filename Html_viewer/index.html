@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>HTML 뷰어</title>
+<style>
+  :root{
+    --bg:#0e0e10; --panel:#16161a; --panel2:#1d1d22; --line:#2a2a31;
+    --text:#e8e6e3; --dim:#8b8a90; --accent:#e5484d; --accent2:#ff6b6f;
+    --ok:#46a758; --warn:#f5a524;
+    --mono: ui-monospace, "JetBrains Mono", "D2Coding", Consolas, "Courier New", monospace;
+    --sans: "Pretendard", "Apple SD Gothic Neo", "Malgun Gothic", system-ui, sans-serif;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;height:100%;background:var(--bg);color:var(--text);font-family:var(--sans);font-size:13px}
+  button,select,input{font-family:inherit;font-size:12px;color:var(--text)}
+  .app{display:flex;flex-direction:column;height:100vh}
+
+  /* 상단 바 */
+  .top{display:flex;align-items:center;gap:6px;padding:8px 10px;background:var(--panel);border-bottom:1px solid var(--line);flex-wrap:wrap}
+  .brand{font-weight:800;letter-spacing:.08em;margin-right:8px;display:flex;align-items:center;gap:6px}
+  .brand i{width:8px;height:8px;background:var(--accent);display:inline-block;border-radius:2px}
+  .grp{display:flex;align-items:center;gap:2px;background:var(--panel2);border:1px solid var(--line);border-radius:7px;padding:2px}
+  .btn{background:transparent;border:0;padding:5px 9px;border-radius:5px;cursor:pointer;white-space:nowrap}
+  .btn:hover{background:#2a2a31}
+  .btn.on{background:var(--accent);color:#fff}
+  .btn.solid{background:var(--panel2);border:1px solid var(--line)}
+  .sep{flex:1}
+  .lbl{color:var(--dim);font-size:11px;padding:0 4px}
+  select{background:var(--panel2);border:1px solid var(--line);border-radius:6px;padding:4px 6px}
+
+  /* 탭 */
+  .tabs{display:flex;align-items:flex-end;gap:2px;padding:6px 10px 0;background:var(--bg);border-bottom:1px solid var(--line);overflow-x:auto}
+  .tab{display:flex;align-items:center;gap:6px;padding:6px 10px;background:var(--panel);border:1px solid var(--line);border-bottom:0;border-radius:7px 7px 0 0;cursor:pointer;color:var(--dim);max-width:200px}
+  .tab.active{color:var(--text);background:var(--panel2);box-shadow:inset 0 2px 0 var(--accent)}
+  .tab span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .tab .x{opacity:.5;border:0;background:none;cursor:pointer;padding:0 2px}
+  .tab .x:hover{opacity:1;color:var(--accent2)}
+  .tab input{background:transparent;border:0;outline:1px solid var(--accent);width:120px;padding:0 2px}
+  .addtab{background:none;border:1px dashed var(--line);color:var(--dim);border-radius:7px 7px 0 0;padding:5px 10px;cursor:pointer}
+  .addtab:hover{color:var(--text)}
+
+  /* 메인 */
+  .main{flex:1;display:flex;min-height:0}
+  .main.v{flex-direction:column}
+  .pane{display:flex;flex-direction:column;min-width:0;min-height:0}
+  .editor-pane{flex:0 0 45%;background:var(--panel2)}
+  .preview-pane{flex:1;background:var(--bg)}
+  .divider{flex:0 0 6px;background:var(--line);cursor:col-resize;transition:background .15s}
+  .main.v .divider{cursor:row-resize}
+  .divider:hover,.divider.drag{background:var(--accent)}
+
+  .editor{flex:1;display:flex;min-height:0;position:relative}
+  .gutter{padding:10px 8px 10px 0;width:48px;text-align:right;color:#55545b;font:12px/1.6 var(--mono);overflow:hidden;user-select:none;background:var(--panel);border-right:1px solid var(--line);white-space:pre}
+  textarea{flex:1;resize:none;border:0;outline:0;background:transparent;color:var(--text);padding:10px 12px;font:12px/1.6 var(--mono);tab-size:2;white-space:pre;overflow:auto}
+  textarea.wrap{white-space:pre-wrap;word-break:break-all}
+  .drop{position:absolute;inset:0;background:rgba(229,72,77,.12);border:2px dashed var(--accent);display:none;align-items:center;justify-content:center;font-size:15px;pointer-events:none}
+  .drop.show{display:flex}
+
+  .stage{flex:1;overflow:auto;display:flex;justify-content:center;align-items:flex-start;padding:16px}
+  .stage.full{padding:0}
+  .frame-wrap{position:relative;transform-origin:top center;box-shadow:0 0 0 1px var(--line),0 10px 40px rgba(0,0,0,.5);height:100%}
+  .stage.full .frame-wrap{box-shadow:none;width:100%}
+  iframe{border:0;width:100%;height:100%;display:block;background:transparent}
+  .bg-white{background:#fff}.bg-black{background:#000}.bg-gray{background:#2b2b30}
+  .bg-check{background-color:#fff;background-image:linear-gradient(45deg,#ddd 25%,transparent 25%),linear-gradient(-45deg,#ddd 25%,transparent 25%),linear-gradient(45deg,transparent 75%,#ddd 75%),linear-gradient(-45deg,transparent 75%,#ddd 75%);background-size:16px 16px;background-position:0 0,0 8px,8px -8px,-8px 0}
+
+  /* 상태 바 */
+  .status{display:flex;align-items:center;gap:14px;padding:5px 12px;background:var(--panel);border-top:1px solid var(--line);color:var(--dim);font-size:11px;flex-wrap:wrap}
+  .status b{color:var(--text);font-weight:600}
+  .chip{padding:1px 7px;border-radius:99px;border:1px solid var(--line)}
+  .chip.warn{border-color:var(--warn);color:var(--warn)}
+  .chip.ok{border-color:#2f5e38;color:var(--ok)}
+  .toast{position:fixed;bottom:40px;left:50%;transform:translateX(-50%) translateY(10px);background:var(--accent);color:#fff;padding:8px 14px;border-radius:8px;opacity:0;transition:.2s;pointer-events:none;font-size:12px}
+  .toast.show{opacity:1;transform:translateX(-50%)}
+  .hidden{display:none!important}
+  .preview-pane:fullscreen{background:var(--bg)}
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="top">
+    <div class="brand"><i></i>HTML VIEWER</div>
+
+    <div class="grp">
+      <button class="btn" id="openBtn" title="HTML 파일 열기">열기</button>
+      <button class="btn" id="saveBtn" title="Ctrl+S">저장</button>
+      <button class="btn" id="copyBtn">복사</button>
+      <button class="btn" id="newWinBtn" title="새 창에서 열기">새 창</button>
+    </div>
+
+    <div class="grp">
+      <button class="btn" id="minifyBtn" title="태그 사이 공백·줄바꿈 제거 (Ctrl+Z로 되돌리기)">공백 압축</button>
+      <button class="btn" id="clearBtn">비우기</button>
+    </div>
+
+    <div class="sep"></div>
+
+    <span class="lbl">화면</span>
+    <div class="grp" id="vpGrp">
+      <button class="btn" data-vp="360">360</button>
+      <button class="btn" data-vp="390">390</button>
+      <button class="btn" data-vp="768">768</button>
+      <button class="btn" data-vp="1280">1280</button>
+      <button class="btn" data-vp="full">꽉</button>
+    </div>
+    <select id="zoomSel" title="미리보기 배율">
+      <option value="50">50%</option><option value="75">75%</option><option value="100" selected>100%</option><option value="125">125%</option><option value="150">150%</option>
+    </select>
+
+    <span class="lbl">배경</span>
+    <div class="grp" id="bgGrp">
+      <button class="btn" data-bg="white">흰</button>
+      <button class="btn" data-bg="black">검</button>
+      <button class="btn" data-bg="gray">회</button>
+      <button class="btn" data-bg="check">투명</button>
+    </div>
+
+    <div class="grp">
+      <button class="btn" id="autoBtn" title="입력하면 바로 반영">자동</button>
+      <button class="btn" id="jsBtn" title="스크립트 실행 허용">JS</button>
+      <button class="btn" id="wrapBtn" title="코드 줄바꿈">줄바꿈</button>
+      <button class="btn" id="refreshBtn" title="Ctrl+Enter">↻</button>
+    </div>
+
+    <div class="grp">
+      <button class="btn" id="layoutBtn" title="좌우 / 상하 전환">⇄</button>
+      <button class="btn" id="focusBtn" title="코드 숨기기">미리보기만</button>
+      <button class="btn" id="fsBtn" title="전체화면">⛶</button>
+    </div>
+  </div>
+
+  <div class="tabs" id="tabs"></div>
+
+  <div class="main" id="main">
+    <div class="pane editor-pane" id="editorPane">
+      <div class="editor" id="editorBox">
+        <div class="gutter" id="gutter">1</div>
+        <textarea id="code" spellcheck="false" wrap="off" placeholder="여기에 HTML 코드를 붙여넣거나 파일을 끌어다 놓으세요"></textarea>
+        <div class="drop" id="drop">파일을 놓으면 새 탭으로 열려요</div>
+      </div>
+    </div>
+    <div class="divider" id="divider"></div>
+    <div class="pane preview-pane" id="previewPane">
+      <div class="stage" id="stage">
+        <div class="frame-wrap bg-white" id="frameWrap">
+          <iframe id="frame" title="미리보기"></iframe>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="status">
+    <span>글자 <b id="sChars">0</b></span>
+    <span>공백 제외 <b id="sNoWs">0</b></span>
+    <span>바이트 <b id="sBytes">0</b></span>
+    <span>줄 <b id="sLines">0</b></span>
+    <span class="sep"></span>
+    <span id="checks"></span>
+  </div>
+</div>
+
+<input type="file" id="fileInput" accept=".html,.htm,.txt,text/html" multiple class="hidden">
+<div class="toast" id="toast"></div>
+
+<script>
+(function(){
+  const KEY = 'htmlviewer.v1';
+  const SAMPLE = `<div style="max-width:360px;margin:24px auto;padding:22px;background:#111;color:#eee;border:1px solid #333;border-radius:14px;font-family:sans-serif;">
+  <div style="font-size:11px;letter-spacing:.2em;color:#e5484d;">PROFILE</div>
+  <div style="font-size:22px;font-weight:800;margin:6px 0 10px;">캐릭터 이름</div>
+  <div style="font-size:13px;line-height:1.7;color:#aaa;">
+    여기에 HTML을 붙여넣으면 오른쪽에 바로 보여요.<br>
+    위쪽 버튼으로 모바일 폭·배경색을 바꿔 볼 수 있어요.
+  </div>
+</div>`;
+
+  const $ = id => document.getElementById(id);
+  const code = $('code'), gutter = $('gutter'), frame = $('frame'), frameWrap = $('frameWrap'), stage = $('stage');
+
+  let state = {
+    tabs:[{id:uid(), name:'새 문서', code:SAMPLE}],
+    active:null, vp:'full', bg:'white', zoom:100,
+    auto:true, js:true, wrap:false, layout:'h', focus:false, split:45
+  };
+  state.active = state.tabs[0].id;
+
+  try{
+    const saved = JSON.parse(localStorage.getItem(KEY) || 'null');
+    if(saved && saved.tabs && saved.tabs.length){ state = Object.assign(state, saved); }
+  }catch(e){}
+
+  function uid(){ return Math.random().toString(36).slice(2,9); }
+  function persist(){ try{ localStorage.setItem(KEY, JSON.stringify(state)); }catch(e){} }
+  function cur(){ return state.tabs.find(t=>t.id===state.active) || state.tabs[0]; }
+  function toast(msg){ const t=$('toast'); t.textContent=msg; t.classList.add('show'); clearTimeout(t._h); t._h=setTimeout(()=>t.classList.remove('show'),1400); }
+
+  /* ---------- 탭 ---------- */
+  function renderTabs(){
+    const box = $('tabs'); box.innerHTML='';
+    state.tabs.forEach(t=>{
+      const el = document.createElement('div');
+      el.className = 'tab' + (t.id===state.active?' active':'');
+      el.title = '더블클릭해서 이름 바꾸기';
+      const nm = document.createElement('span'); nm.textContent = t.name;
+      el.appendChild(nm);
+      if(state.tabs.length>1){
+        const x = document.createElement('button'); x.className='x'; x.textContent='×';
+        x.onclick = e=>{ e.stopPropagation(); closeTab(t.id); };
+        el.appendChild(x);
+      }
+      el.onclick = ()=>{ if(state.active!==t.id){ state.active=t.id; loadTab(); } };
+      el.ondblclick = ()=>{
+        const inp = document.createElement('input'); inp.value=t.name;
+        el.replaceChild(inp, nm); inp.focus(); inp.select();
+        const done=()=>{ t.name = inp.value.trim() || t.name; persist(); renderTabs(); };
+        inp.onblur = done; inp.onkeydown = e=>{ if(e.key==='Enter') inp.blur(); if(e.key==='Escape'){ inp.value=t.name; inp.blur(); } };
+      };
+      box.appendChild(el);
+    });
+    const add = document.createElement('button'); add.className='addtab'; add.textContent='+ 새 탭';
+    add.onclick = ()=> newTab('새 문서','');
+    box.appendChild(add);
+  }
+  function newTab(name, c){
+    const t = {id:uid(), name, code:c};
+    state.tabs.push(t); state.active=t.id; loadTab(); code.focus();
+  }
+  function closeTab(id){
+    const t = state.tabs.find(x=>x.id===id);
+    if(t && t.code.trim() && !confirm(`「${t.name}」 탭을 닫을까요? 내용이 사라져요.`)) return;
+    const i = state.tabs.findIndex(x=>x.id===id);
+    state.tabs.splice(i,1);
+    if(state.active===id) state.active = state.tabs[Math.max(0,i-1)].id;
+    loadTab();
+  }
+  function loadTab(){
+    code.value = cur().code;
+    renderTabs(); updateGutter(); updateStats(); render(); persist();
+  }
+
+  /* ---------- 미리보기 ---------- */
+  let lastScroll = {x:0,y:0}, sameDoc = false;
+  function render(keepScroll){
+    try{
+      const w = frame.contentWindow;
+      if(keepScroll && w){ lastScroll = {x:w.scrollX, y:w.scrollY}; } else { lastScroll={x:0,y:0}; }
+    }catch(e){ lastScroll={x:0,y:0}; }
+    frame.setAttribute('sandbox', state.js
+      ? 'allow-scripts allow-same-origin allow-forms allow-popups allow-modals'
+      : 'allow-same-origin allow-popups');
+    frame.srcdoc = cur().code;
+  }
+  frame.addEventListener('load', ()=>{
+    try{ frame.contentWindow.scrollTo(lastScroll.x, lastScroll.y); }catch(e){}
+  });
+
+  function applyView(){
+    // 뷰포트
+    document.querySelectorAll('#vpGrp .btn').forEach(b=>b.classList.toggle('on', b.dataset.vp===String(state.vp)));
+    const full = state.vp==='full';
+    stage.classList.toggle('full', full);
+    const z = state.zoom/100;
+    if(full){
+      frameWrap.style.width = (100/z)+'%';
+      frameWrap.style.height = (100/z)+'%';
+    }else{
+      frameWrap.style.width = state.vp+'px';
+      frameWrap.style.height = `calc((100% - 0px) / ${z})`;
+    }
+    frameWrap.style.transform = z===1 ? '' : `scale(${z})`;
+    frameWrap.style.transformOrigin = full ? 'top left' : 'top center';
+    $('zoomSel').value = String(state.zoom);
+    // 배경
+    frameWrap.className = 'frame-wrap bg-' + state.bg;
+    document.querySelectorAll('#bgGrp .btn').forEach(b=>b.classList.toggle('on', b.dataset.bg===state.bg));
+    // 토글
+    $('autoBtn').classList.toggle('on', state.auto);
+    $('jsBtn').classList.toggle('on', state.js);
+    $('wrapBtn').classList.toggle('on', state.wrap);
+    $('focusBtn').classList.toggle('on', state.focus);
+    code.classList.toggle('wrap', state.wrap);
+    code.setAttribute('wrap', state.wrap?'soft':'off');
+    gutter.classList.toggle('hidden', state.wrap);
+    // 레이아웃
+    $('main').classList.toggle('v', state.layout==='v');
+    $('editorPane').style.flexBasis = state.split+'%';
+    $('editorPane').classList.toggle('hidden', state.focus);
+    $('divider').classList.toggle('hidden', state.focus);
+  }
+
+  /* ---------- 에디터 ---------- */
+  function updateGutter(){
+    const n = code.value.split('\n').length;
+    let s=''; for(let i=1;i<=n;i++) s += i+'\n';
+    gutter.textContent = s;
+    gutter.scrollTop = code.scrollTop;
+  }
+  code.addEventListener('scroll', ()=>{ gutter.scrollTop = code.scrollTop; });
+
+  function updateStats(){
+    const v = code.value;
+    $('sChars').textContent = v.length.toLocaleString();
+    $('sNoWs').textContent = v.replace(/\s/g,'').length.toLocaleString();
+    $('sBytes').textContent = new TextEncoder().encode(v).length.toLocaleString();
+    $('sLines').textContent = v ? v.split('\n').length.toLocaleString() : 0;
+    const cnt = re => (v.match(re)||[]).length;
+    const items = [
+      ['&lt;style&gt;', cnt(/<style[\s>]/gi)],
+      ['&lt;script&gt;', cnt(/<script[\s>]/gi)],
+      ['class', cnt(/\sclass\s*=/gi)],
+      ['&lt;link&gt;', cnt(/<link[\s>]/gi)],
+      ['외부 URL', cnt(/https?:\/\/[^\s"')]+/gi)],
+    ];
+    const box = $('checks');
+    box.innerHTML = items.map(([k,n])=>`<span class="chip ${n? 'warn':'ok'}">${k} ${n}</span>`).join(' ');
+    box.title = '인라인 스타일만 되는 플랫폼에 올릴 때 확인용';
+  }
+
+  let tmr;
+  code.addEventListener('input', ()=>{
+    cur().code = code.value;
+    updateGutter(); updateStats();
+    clearTimeout(tmr);
+    tmr = setTimeout(()=>{ persist(); if(state.auto) render(true); }, 250);
+  });
+
+  // 되돌리기가 살아있는 방식으로 텍스트 교체
+  function replaceAll(text){
+    code.focus(); code.select();
+    let ok=false;
+    try{ ok = document.execCommand('insertText', false, text); }catch(e){}
+    if(!ok){ code.value = text; code.dispatchEvent(new Event('input')); }
+  }
+
+  code.addEventListener('keydown', e=>{
+    if(e.key==='Tab' && !e.ctrlKey && !e.metaKey){
+      e.preventDefault();
+      const s=code.selectionStart, en=code.selectionEnd;
+      if(s===en){ document.execCommand('insertText', false, '  ') || (code.setRangeText('  ', s, en, 'end'), code.dispatchEvent(new Event('input'))); }
+      else{
+        // 여러 줄 들여쓰기 / 내어쓰기
+        const v=code.value, ls=v.lastIndexOf('\n', s-1)+1;
+        const block=v.slice(ls, en);
+        const out = e.shiftKey ? block.replace(/^ {1,2}/gm,'') : block.replace(/^/gm,'  ');
+        code.setSelectionRange(ls, en);
+        document.execCommand('insertText', false, out);
+        code.setSelectionRange(ls, ls+out.length);
+      }
+    }
+  });
+
+  /* ---------- 파일 ---------- */
+  function readFiles(files){
+    [...files].forEach(f=>{
+      const r = new FileReader();
+      r.onload = ()=>{
+        const name = f.name.replace(/\.(html?|txt)$/i,'');
+        const c = cur();
+        if(!c.code.trim()){ c.code = r.result; c.name = name; loadTab(); }
+        else newTab(name, r.result);
+        toast(`「${f.name}」 열었어요`);
+      };
+      r.readAsText(f);
+    });
+  }
+  $('openBtn').onclick = ()=> $('fileInput').click();
+  $('fileInput').onchange = e=>{ readFiles(e.target.files); e.target.value=''; };
+
+  const box = $('editorBox'), drop = $('drop');
+  ['dragenter','dragover'].forEach(ev=>document.addEventListener(ev, e=>{ if(e.dataTransfer && [...e.dataTransfer.types].includes('Files')){ e.preventDefault(); drop.classList.add('show'); } }));
+  ['dragleave','drop'].forEach(ev=>document.addEventListener(ev, e=>{ if(ev==='dragleave' && e.relatedTarget) return; drop.classList.remove('show'); }));
+  document.addEventListener('drop', e=>{ if(e.dataTransfer.files.length){ e.preventDefault(); readFiles(e.dataTransfer.files); } });
+
+  function download(){
+    const t = cur();
+    const blob = new Blob([t.code], {type:'text/html;charset=utf-8'});
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = (t.name || 'document').replace(/[\\/:*?"<>|]/g,'_') + '.html';
+    document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(()=>URL.revokeObjectURL(a.href), 2000);
+    toast('저장했어요');
+  }
+  $('saveBtn').onclick = download;
+
+  $('copyBtn').onclick = async ()=>{
+    try{ await navigator.clipboard.writeText(cur().code); toast('복사했어요'); }
+    catch(e){ code.focus(); code.select(); document.execCommand('copy'); toast('복사했어요'); }
+  };
+  $('newWinBtn').onclick = ()=>{
+    const url = URL.createObjectURL(new Blob([cur().code], {type:'text/html;charset=utf-8'}));
+    window.open(url, '_blank');
+  };
+  $('minifyBtn').onclick = ()=>{
+    const v = code.value;
+    const out = v.replace(/<!--(?!\[)[\s\S]*?-->/g,'').replace(/>\s+</g,'><').replace(/\s*\n\s*/g,' ').trim();
+    const before = v.length;
+    replaceAll(out);
+    toast(`${before.toLocaleString()} → ${out.length.toLocaleString()}자 (Ctrl+Z로 되돌리기)`);
+  };
+  $('clearBtn').onclick = ()=>{ if(!code.value || confirm('이 탭 내용을 비울까요?')) replaceAll(''); };
+
+  /* ---------- 보기 설정 ---------- */
+  $('vpGrp').onclick = e=>{ const b=e.target.closest('[data-vp]'); if(!b) return; state.vp = b.dataset.vp==='full'?'full':+b.dataset.vp; applyView(); persist(); };
+  $('bgGrp').onclick = e=>{ const b=e.target.closest('[data-bg]'); if(!b) return; state.bg=b.dataset.bg; applyView(); persist(); };
+  $('zoomSel').onchange = e=>{ state.zoom=+e.target.value; applyView(); persist(); };
+  $('autoBtn').onclick = ()=>{ state.auto=!state.auto; applyView(); persist(); if(state.auto) render(true); };
+  $('jsBtn').onclick = ()=>{ state.js=!state.js; applyView(); persist(); render(true); };
+  $('wrapBtn').onclick = ()=>{ state.wrap=!state.wrap; applyView(); persist(); updateGutter(); };
+  $('refreshBtn').onclick = ()=> render(true);
+  $('layoutBtn').onclick = ()=>{ state.layout = state.layout==='h'?'v':'h'; applyView(); persist(); };
+  $('focusBtn').onclick = ()=>{ state.focus=!state.focus; applyView(); persist(); };
+  $('fsBtn').onclick = ()=>{
+    const p=$('previewPane');
+    if(document.fullscreenElement) document.exitFullscreen();
+    else p.requestFullscreen && p.requestFullscreen().catch(()=>toast('전체화면을 쓸 수 없어요'));
+  };
+
+  // 분할선 드래그
+  const divider = $('divider'), main = $('main');
+  divider.addEventListener('pointerdown', e=>{
+    divider.classList.add('drag'); divider.setPointerCapture(e.pointerId);
+    frame.style.pointerEvents='none';
+    const move = ev=>{
+      const r = main.getBoundingClientRect();
+      const pct = state.layout==='h' ? (ev.clientX-r.left)/r.width*100 : (ev.clientY-r.top)/r.height*100;
+      state.split = Math.min(85, Math.max(15, pct));
+      $('editorPane').style.flexBasis = state.split+'%';
+    };
+    const up = ()=>{ divider.classList.remove('drag'); frame.style.pointerEvents=''; divider.removeEventListener('pointermove',move); divider.removeEventListener('pointerup',up); persist(); };
+    divider.addEventListener('pointermove', move); divider.addEventListener('pointerup', up);
+  });
+
+  // 단축키
+  document.addEventListener('keydown', e=>{
+    const mod = e.ctrlKey || e.metaKey;
+    if(mod && e.key.toLowerCase()==='s'){ e.preventDefault(); download(); }
+    if(mod && e.key==='Enter'){ e.preventDefault(); render(true); }
+  });
+
+  applyView(); loadTab();
+})();
+</script>
+</body>
+</html>
